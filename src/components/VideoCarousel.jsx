@@ -20,6 +20,12 @@ const VideoCarousel = () => {
   const {isEnd, startPlay, videoId, isLastVideo, isPlaying}= video;
 
   useGSAP(()=>{
+    gsap.to('#slider',{
+      transform:`translateX(${-100*videoId}%)`,
+      duration:2,
+      ease:'power2.inOut'
+    })
+    
     gsap.to('#video',{
       scrollTrigger:{
         trigger:'#video',
@@ -28,10 +34,10 @@ const VideoCarousel = () => {
       onComplete:()=>{
         setVideo((pre)=>({...pre, startPlay:true,
           isPlaying:true
-        }))
-      }
-    })
-  },[isEnd, videoId])
+        }));
+      },
+    });
+  },[isEnd, videoId]);
 
   
   useEffect(()=>{
@@ -131,6 +137,9 @@ const handleProcess=(type,i)=>{
       case 'play':
         setVideo((pre)=>({...pre, isPlaying: !pre.isPlaying}))
         break;
+      case 'pause':
+        setVideo((pre)=>({...pre, isPlaying: !pre.isPlaying}))
+        break;
       default:
         return video;
          
@@ -142,16 +151,25 @@ const handleProcess=(type,i)=>{
 
 
 
-
+const handleLoadedMetaData = (i, e) => setLoadedData((pre) => [...pre, e]);
   return (
-   <div>
+   <> 
     <div className='flex items-center'>
       {highlightsSlides.map((list,i) => (
         <div key={list.id} id='slider' className='sm:pr-20 pr-10'>
           <div className='video-carousel_container'>
             <div className='w-full h-full flex-center rounded-3xl overflow-hidden bg-black '>
-              <video id="video" playsInline={true} preload='auto' muted
+              <video id="video" playsInline={true} 
+              className={`${
+                    list.id === 2 && "translate-x-44"
+                  } pointer-events-none`} 
+              preload='auto' muted
                ref={(el)=>(videoRef.current[i]=el)}
+               onEnded={() =>
+                i !== 3
+                  ? handleProcess("video-end", i)
+                  : handleProcess("video-last")
+              }
                onPlay={()=>{
                 setVideo((prevVideo)=>({...prevVideo,isPlaying:true
                 }))
@@ -182,16 +200,18 @@ const handleProcess=(type,i)=>{
           </span>
         ))}
       </div>
-    </div>
+    
+    
     <button className='control-btn'>
       <img src={isLastVideo?replayImg:!isPlaying ? playImg: pauseImg} alt={isLastVideo?'replay':!isPlaying? 'play':'pause'} 
       onClick={isLastVideo?()=>handleProcess('video-reset'):!isPlaying?()=>handleProcess('play'): ()=> handleProcess('pause')} />
     </button>
   </div>
-  )
+  </>
+  );
   
 
-}
+};
   
 
 
