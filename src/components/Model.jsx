@@ -2,8 +2,12 @@
  import ModelView from './ModelView'
  import { useState} from 'react';
  import gsap  from 'gsap';
- import * as THREE from THREE;
+ import * as THREE from 'three';
  import { yellowImg } from "../utils";
+ import { useRef } from 'react';
+ import { useGSAP } from '@gsap/react';
+ import { Canvas } from "@react-three/fiber";
+ import { View } from "@react-three/drei";
 
 
 const Model = () => {
@@ -20,6 +24,12 @@ const Model = () => {
   // model
   const small = useRef(new THREE.Group());
   const large = useRef(new THREE.Group());
+
+   // rotation
+   const [smallRotation, setSmallRotation] = useState(0);
+   const [largeRotation, setLargeRotation] = useState(0);
+ 
+   const tl = gsap.timeline();
 
 
 
@@ -47,7 +57,31 @@ const Model = () => {
               item={model}
               size={size}
             />  
+            <ModelView 
+              index={2}
+              groupRef={large}
+              gsapType="view2"
+              controlRef={cameraControlLarge}
+              setRotationState={setLargeRotation}
+              item={model}
+              size={size}
+            />
+            <Canvas
+              className="w-full h-full"
+              style={{
+                position: 'fixed',
+                top: 0,
+                bottom: 0,
+                left: 0,
+                right: 0,
+                overflow: 'hidden'
+              }}
+              eventSource={document.getElementById('root')}
+            >
+              <View.Port />
+            </Canvas>
         </div>
+        
         </div>
         </div>
     </section>
