@@ -31,7 +31,7 @@ const Model = () => {
    const [largeRotation, setLargeRotation] = useState(0);
  
    const tl = gsap.timeline();
-
+   
 
 
 
