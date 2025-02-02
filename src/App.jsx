@@ -4,6 +4,7 @@ import Highlights from "./components/Highlights"
 import Model from './components/Model.jsx';
 import * as Sentry from '@sentry/react';
 import Features from './components/Features.jsx';
+import HowItWorks from './components/HowItWorks.jsx';
 
 function App() {
   
@@ -15,6 +16,7 @@ function App() {
       <Highlights />
       <Model/>
       <Features/>
+      <HowItWorks/>
     </main>
     
   )
